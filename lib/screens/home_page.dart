@@ -779,9 +779,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ))
                     : Container(),
 
-
-
-            //NEED TO WORK alot on this
+                //NEED TO WORK alot on this
                 getLayer
                     ? Positioned(
                         bottom: 20.0,
@@ -802,56 +800,56 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            searchToggle = false;
-            radiusSlider = false;
-            pressedNear = false;
-            cardTapped = false;
-            getDirections = false;
-            getLayer = true;
-          });
-          // color:
-          // foregroundColor(Colors.greenAccent);
-          // color:
-          // backgroundColor(Colors.green);
-        },
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     setState(() {
+      //       searchToggle = false;
+      //       radiusSlider = false;
+      //       pressedNear = false;
+      //       cardTapped = false;
+      //       getDirections = false;
+      //       getLayer = true;
+      //     });
+      //     // color:
+      //     // foregroundColor(Colors.greenAccent);
+      //     // color:
+      //     // backgroundColor(Colors.green);
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
 
-      // floatingActionButton: FabCircularMenu(
-      //     alignment: Alignment.bottomLeft,
-      //     fabColor: Colors.blue.shade50,
-      //     fabOpenColor: Colors.red.shade100,
-      //     ringDiameter: 250.0,
-      //     ringWidth: 60.0,
-      //     ringColor: Colors.blue.shade50,
-      //     fabSize: 60.0,
-      //     children: [
-      //       IconButton(
-      //           onPressed: () {
-      //             setState(() {
-      //               searchToggle = true;
-      //               radiusSlider = false;
-      //               pressedNear = false;
-      //               cardTapped = false;
-      //               getDirections = false;
-      //             });
-      //           },
-      //           icon: Icon(Icons.search)),
-      //       IconButton(
-      //           onPressed: () {
-      //             setState(() {
-      //               searchToggle = false;
-      //               radiusSlider = false;
-      //               pressedNear = false;
-      //               cardTapped = false;
-      //               getDirections = true;
-      //             });
-      //           },
-      //           icon: Icon(Icons.navigation))
-      //     ]),
+      floatingActionButton: FabCircularMenu(
+          alignment: Alignment.bottomLeft,
+          fabColor: Colors.blue.shade50,
+          fabOpenColor: Colors.red.shade100,
+          ringDiameter: 250.0,
+          ringWidth: 60.0,
+          ringColor: Colors.blue.shade50,
+          fabSize: 60.0,
+          children: [
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    searchToggle = true;
+                    radiusSlider = false;
+                    pressedNear = false;
+                    cardTapped = false;
+                    getDirections = false;
+                  });
+                },
+                icon: Icon(Icons.search)),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    searchToggle = false;
+                    radiusSlider = false;
+                    pressedNear = false;
+                    cardTapped = false;
+                    getDirections = true;
+                  });
+                },
+                icon: Icon(Icons.navigation))
+          ]),
     );
   }
 
