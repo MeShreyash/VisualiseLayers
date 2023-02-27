@@ -260,6 +260,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                     polylines: _polylines,
                     circles: _circles,
                     initialCameraPosition: _kGooglePlex,
+                    rotateGesturesEnabled: true,
+                    scrollGesturesEnabled: true,
+                    zoomControlsEnabled: true,
+                    zoomGesturesEnabled: true,
                     onMapCreated: (GoogleMapController controller) {
                       _controller.complete(controller);
                     },
@@ -790,7 +794,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ? FilterPage(
                         allTextList: userList,
                         selectedUserList: selectedUserList,
-                      ) 
+                      )
                     : Container(),
               ],
             )
