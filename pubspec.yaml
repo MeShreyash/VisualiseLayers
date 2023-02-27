@@ -43,6 +43,7 @@ dependencies:
   flutter_polyline_points:
   flutter_rating_stars:
   flip_card:
+  filter_list: ^1.0.2
 
 dev_dependencies:
   flutter_test:

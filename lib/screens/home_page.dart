@@ -35,7 +35,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool cardTapped = false;
   bool pressedNear = false;
   bool getDirections = false;
-  bool getLayer = false;
+  bool getFilter = false;
 
 //Markers set
   Set<Marker> _markers = Set<Marker>();
@@ -161,6 +161,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       markerIcon = await getBytesFromAsset('assets/mapicons/food.png', 75);
     else if (types.contains('school'))
       markerIcon = await getBytesFromAsset('assets/mapicons/schools.png', 75);
+    else if (types.contains('hospital'))
+      markerIcon = await getBytesFromAsset('assets/mapicons/doctors.png', 75);
     else if (types.contains('bar'))
       markerIcon = await getBytesFromAsset('assets/mapicons/bars.png', 75);
     else if (types.contains('lodging'))
@@ -480,7 +482,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       onPressed: () {
                                         if (_debounce?.isActive ?? false)
                                           _debounce?.cancel();
-                                        _debounce = Timer(Duration(seconds: 2),
+                                        _debounce = Timer(Duration(seconds: 1),
                                             () async {
                                           var placesResult = await MapServices()
                                               .getPlaceDetails(tappedPoint,
@@ -520,7 +522,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       onPressed: () {
                                         if (_debounce?.isActive ?? false)
                                           _debounce?.cancel();
-                                        _debounce = Timer(Duration(seconds: 2),
+                                        _debounce = Timer(Duration(seconds: 1),
                                             () async {
                                           if (tokenKey != 'none') {
                                             var placesResult =
@@ -780,19 +782,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     : Container(),
 
                 //NEED TO WORK alot on this
-                getLayer
-                    ? Positioned(
-                        bottom: 20.0,
-                        child: Container(
-                          height: 200.0,
-                          width: MediaQuery.of(context).size.width,
-                          child: PageView.builder(
-                              controller: _pageController,
-                              itemCount: allFavoritePlaces.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return _Restaurants(index);
-                              }),
-                        ))
+                getFilter
+                    ? Positioned(bottom: 20.0, child: Container())
                     : Container(),
               ],
             )
@@ -808,7 +799,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       //       pressedNear = false;
       //       cardTapped = false;
       //       getDirections = false;
-      //       getLayer = true;
+      //       getFilter = true;
       //     });
       //     // color:
       //     // foregroundColor(Colors.greenAccent);
