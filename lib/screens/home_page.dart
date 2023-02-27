@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:filter_list/filter_list.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +16,8 @@ import 'package:googlemapsapp/providers/search_places.dart';
 import 'package:googlemapsapp/services/map_services.dart';
 
 import 'dart:ui' as ui;
+
+import '../components/filter.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -50,6 +53,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   var tappedPoint;
 
   List allFavoritePlaces = [];
+  List<User>? selectedUserList = [];
 
   String tokenKey = '';
 
@@ -783,32 +787,16 @@ class _HomePageState extends ConsumerState<HomePage> {
 
                 //NEED TO WORK alot on this
                 getFilter
-                    ? Positioned(bottom: 20.0, child: Container())
+                    ? FilterPage(
+                        allTextList: userList,
+                        selectedUserList: selectedUserList,
+                      ) 
                     : Container(),
               ],
             )
           ],
         ),
       ),
-
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     setState(() {
-      //       searchToggle = false;
-      //       radiusSlider = false;
-      //       pressedNear = false;
-      //       cardTapped = false;
-      //       getDirections = false;
-      //       getFilter = true;
-      //     });
-      //     // color:
-      //     // foregroundColor(Colors.greenAccent);
-      //     // color:
-      //     // backgroundColor(Colors.green);
-      //   },
-      //   child: const Icon(Icons.add),
-      // ),
-
       floatingActionButton: FabCircularMenu(
           alignment: Alignment.bottomLeft,
           fabColor: Colors.blue.shade50,
@@ -831,15 +819,29 @@ class _HomePageState extends ConsumerState<HomePage> {
                 },
                 icon: Icon(Icons.search)),
             IconButton(
-                onPressed: () {
+                onPressed: () async {
                   setState(() {
                     searchToggle = false;
                     radiusSlider = false;
                     pressedNear = false;
                     cardTapped = false;
                     getDirections = false;
-                    getFilter = true;
+                    getFilter = false;
                   });
+                  final list = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FilterPage(
+                        allTextList: userList,
+                        selectedUserList: selectedUserList,
+                      ),
+                    ),
+                  );
+                  if (list != null) {
+                    setState(() {
+                      selectedUserList = List.from(list);
+                    });
+                  }
                 },
                 icon: Icon(Icons.add))
           ]),
@@ -1231,6 +1233,52 @@ class _HomePageState extends ConsumerState<HomePage> {
         CameraPosition(target: LatLng(lat, lng), zoom: 12)));
 
     _setMarker(LatLng(lat, lng));
+  }
+
+  //
+  Future<void> _openFilterDialog() async {
+    await FilterListDialog.display<User>(
+      context,
+      hideSelectedTextCount: true,
+      themeData: FilterListThemeData(context),
+      headlineText: 'Select Categories',
+      height: 500,
+      listData: userList,
+      selectedListData: selectedUserList,
+      choiceChipLabel: (item) => item!.name,
+      validateSelectedItem: (list, val) => list!.contains(val),
+      controlButtons: [ControlButtonType.All, ControlButtonType.Reset],
+      onItemSearch: (user, query) {
+        /// When search query change in search bar then this method will be called
+        ///
+        /// Check if items contains query
+        return user.name!.toLowerCase().contains(query.toLowerCase());
+      },
+
+      onApplyButtonClick: (list) {
+        setState(() {
+          selectedUserList = List.from(list!);
+        });
+        Navigator.pop(context);
+      },
+
+      /// uncomment below code to create custom choice chip
+      /* choiceChipBuilder: (context, item, isSelected) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          decoration: BoxDecoration(
+              border: Border.all(
+            color: isSelected! ? Colors.blue[300]! : Colors.grey[300]!,
+          )),
+          child: Text(
+            item.name,
+            style: TextStyle(
+                color: isSelected ? Colors.blue[300] : Colors.grey[500]),
+          ),
+        );
+      }, */
+    );
   }
 
   Widget buildListItem(AutoCompleteResult placeItem, searchFlag) {

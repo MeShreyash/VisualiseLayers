@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:googlemapsapp/screens/home_page.dart';
 import 'package:lottie/lottie.dart';
 
+import 'components/filter.dart';
+
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
