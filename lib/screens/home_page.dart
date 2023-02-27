@@ -53,7 +53,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   var tappedPoint;
 
   List allFavoritePlaces = [];
-  List<User>? selectedUserList = [];
+  List<Category>? selectedCategoryList = [];
 
   String tokenKey = '';
 
@@ -792,8 +792,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                 //NEED TO WORK alot on this
                 getFilter
                     ? FilterPage(
-                        allTextList: userList,
-                        selectedUserList: selectedUserList,
+                        allTextList: CategoryList,
+                        selectedCategoryList: selectedCategoryList,
                       )
                     : Container(),
               ],
@@ -836,14 +836,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => FilterPage(
-                        allTextList: userList,
-                        selectedUserList: selectedUserList,
+                        allTextList: CategoryList,
+                        selectedCategoryList: selectedCategoryList,
                       ),
                     ),
                   );
                   if (list != null) {
                     setState(() {
-                      selectedUserList = List.from(list);
+                      selectedCategoryList = List.from(list);
                     });
                   }
                 },
@@ -1241,27 +1241,27 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   //
   Future<void> _openFilterDialog() async {
-    await FilterListDialog.display<User>(
+    await FilterListDialog.display<Category>(
       context,
       hideSelectedTextCount: true,
       themeData: FilterListThemeData(context),
       headlineText: 'Select Categories',
       height: 500,
-      listData: userList,
-      selectedListData: selectedUserList,
+      listData: CategoryList,
+      selectedListData: selectedCategoryList,
       choiceChipLabel: (item) => item!.name,
       validateSelectedItem: (list, val) => list!.contains(val),
       controlButtons: [ControlButtonType.All, ControlButtonType.Reset],
-      onItemSearch: (user, query) {
+      onItemSearch: (Category, query) {
         /// When search query change in search bar then this method will be called
         ///
         /// Check if items contains query
-        return user.name!.toLowerCase().contains(query.toLowerCase());
+        return Category.name!.toLowerCase().contains(query.toLowerCase());
       },
 
       onApplyButtonClick: (list) {
         setState(() {
-          selectedUserList = List.from(list!);
+          selectedCategoryList = List.from(list!);
         });
         Navigator.pop(context);
       },

@@ -1,22 +1,22 @@
 import 'package:filter_list/filter_list.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class FilterScreen extends StatefulWidget {
+  const FilterScreen({Key? key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _FilterScreenState createState() => _FilterScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  List<User>? selectedUserList = [];
+class _FilterScreenState extends State<FilterScreen> {
+  List<Category>? selectedCategoryList = [];
 
   Future<void> openFilterDelegate() async {
-    await FilterListDelegate.show<User>(
+    await FilterListDelegate.show<Category>(
       context: context,
-      list: userList,
-      selectedListData: selectedUserList,
+      list: CategoryList,
+      selectedListData: selectedCategoryList,
       theme: FilterListDelegateThemeData(
         listTileTheme: ListTileThemeData(
           shape: RoundedRectangleBorder(
@@ -29,16 +29,16 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       // enableOnlySingleSelection: true,
-      onItemSearch: (user, query) {
-        return user.name!.toLowerCase().contains(query.toLowerCase());
+      onItemSearch: (Category, query) {
+        return Category.name!.toLowerCase().contains(query.toLowerCase());
       },
-      tileLabel: (user) => user!.name,
-      emptySearchChild: const Center(child: Text('No user found')),
+      tileLabel: (Category) => Category!.name,
+      emptySearchChild: const Center(child: Text('No Category found')),
       // enableOnlySingleSelection: true,
       searchFieldHint: 'Search Here..',
-      /*suggestionBuilder: (context, user, isSelected) {
+      /*suggestionBuilder: (context, Category, isSelected) {
         return ListTile(
-          title: Text(user.name!),
+          title: Text(Category.name!),
           leading: const CircleAvatar(
             backgroundColor: Colors.blue,
           ),
@@ -47,34 +47,34 @@ class _MyHomePageState extends State<MyHomePage> {
       },*/
       onApplyButtonClick: (list) {
         setState(() {
-          selectedUserList = list;
+          selectedCategoryList = list;
         });
       },
     );
   }
 
   Future<void> _openFilterDialog() async {
-    await FilterListDialog.display<User>(
+    await FilterListDialog.display<Category>(
       context,
       hideSelectedTextCount: true,
       themeData: FilterListThemeData(context),
       headlineText: 'Select Categories',
       height: 500,
-      listData: userList,
-      selectedListData: selectedUserList,
+      listData: CategoryList,
+      selectedListData: selectedCategoryList,
       choiceChipLabel: (item) => item!.name,
       validateSelectedItem: (list, val) => list!.contains(val),
       controlButtons: [ControlButtonType.All, ControlButtonType.Reset],
-      onItemSearch: (user, query) {
+      onItemSearch: (Category, query) {
         /// When search query change in search bar then this method will be called
         ///
         /// Check if items contains query
-        return user.name!.toLowerCase().contains(query.toLowerCase());
+        return Category.name!.toLowerCase().contains(query.toLowerCase());
       },
 
       onApplyButtonClick: (list) {
         setState(() {
-          selectedUserList = List.from(list!);
+          selectedCategoryList = List.from(list!);
         });
         Navigator.pop(context);
       },
@@ -115,14 +115,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => FilterPage(
-                      allTextList: userList,
-                      selectedUserList: selectedUserList,
+                      allTextList: CategoryList,
+                      selectedCategoryList: selectedCategoryList,
                     ),
                   ),
                 );
                 if (list != null) {
                   setState(() {
-                    selectedUserList = List.from(list);
+                    selectedCategoryList = List.from(list);
                   });
                 }
               },
@@ -161,10 +161,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: <Widget>[
-          if (selectedUserList == null || selectedUserList!.isEmpty)
+          if (selectedCategoryList == null || selectedCategoryList!.isEmpty)
             const Expanded(
               child: Center(
-                child: Text('No user selected'),
+                child: Text('No Category selected'),
               ),
             )
           else
@@ -172,11 +172,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ListView.separated(
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(selectedUserList![index].name!),
+                    title: Text(selectedCategoryList![index].name!),
                   );
                 },
                 separatorBuilder: (context, index) => const Divider(),
-                itemCount: selectedUserList!.length,
+                itemCount: selectedCategoryList!.length,
               ),
             ),
         ],
@@ -186,10 +186,10 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class FilterPage extends StatelessWidget {
-  const FilterPage({Key? key, this.allTextList, this.selectedUserList})
+  const FilterPage({Key? key, this.allTextList, this.selectedCategoryList})
       : super(key: key);
-  final List<User>? allTextList;
-  final List<User>? selectedUserList;
+  final List<Category>? allTextList;
+  final List<Category>? selectedCategoryList;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -211,11 +211,11 @@ class FilterPage extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: FilterListWidget<User>(
+        child: FilterListWidget<Category>(
           themeData: FilterListThemeData(context),
           hideSelectedTextCount: true,
-          listData: userList,
-          selectedListData: selectedUserList,
+          listData: CategoryList,
+          selectedListData: selectedCategoryList,
           onApplyButtonClick: (list) {
             Navigator.pop(context, list);
           },
@@ -238,11 +238,11 @@ class FilterPage extends StatelessWidget {
             ///  identify if item is selected or not
             return list!.contains(val);
           },
-          onItemSearch: (user, query) {
+          onItemSearch: (Category, query) {
             /// When search query change in search bar then this method will be called
             ///
             /// Check if items contains query
-            return user.name!.toLowerCase().contains(query.toLowerCase());
+            return Category.name!.toLowerCase().contains(query.toLowerCase());
           },
         ),
       ),
@@ -250,55 +250,55 @@ class FilterPage extends StatelessWidget {
   }
 }
 
-class User {
+class Category {
   final String? name;
   final String? avatar;
-  User({this.name, this.avatar});
+  Category({this.name, this.avatar});
 }
 
 /// Creating a global list for example purpose.
 /// Generally it should be within data class or where ever you want
-List<User> userList = [
-  User(name: "Abigail", avatar: "user.png"),
-  User(name: "Audrey", avatar: "user.png"),
-  User(name: "Ava", avatar: "user.png"),
-  User(name: "Bella", avatar: "user.png"),
-  User(name: "Bernadette", avatar: "user.png"),
-  User(name: "Carol", avatar: "user.png"),
-  User(name: "Claire", avatar: "user.png"),
-  User(name: "Deirdre", avatar: "user.png"),
-  User(name: "Donna", avatar: "user.png"),
-  User(name: "Dorothy", avatar: "user.png"),
-  User(name: "Faith", avatar: "user.png"),
-  User(name: "Gabrielle", avatar: "user.png"),
-  User(name: "Grace", avatar: "user.png"),
-  User(name: "Hannah", avatar: "user.png"),
-  User(name: "Heather", avatar: "user.png"),
-  User(name: "Irene", avatar: "user.png"),
-  User(name: "Jan", avatar: "user.png"),
-  User(name: "Jane", avatar: "user.png"),
-  User(name: "Julia", avatar: "user.png"),
-  User(name: "Kylie", avatar: "user.png"),
-  User(name: "Lauren", avatar: "user.png"),
-  User(name: "Leah", avatar: "user.png"),
-  User(name: "Lisa", avatar: "user.png"),
-  User(name: "Melanie", avatar: "user.png"),
-  User(name: "Natalie", avatar: "user.png"),
-  User(name: "Olivia", avatar: "user.png"),
-  User(name: "Penelope", avatar: "user.png"),
-  User(name: "Rachel", avatar: "user.png"),
-  User(name: "Ruth", avatar: "user.png"),
-  User(name: "Sally", avatar: "user.png"),
-  User(name: "Samantha", avatar: "user.png"),
-  User(name: "Sarah", avatar: "user.png"),
-  User(name: "Theresa", avatar: "user.png"),
-  User(name: "Una", avatar: "user.png"),
-  User(name: "Vanessa", avatar: "user.png"),
-  User(name: "Victoria", avatar: "user.png"),
-  User(name: "Wanda", avatar: "user.png"),
-  User(name: "Wendy", avatar: "user.png"),
-  User(name: "Yvonne", avatar: "user.png"),
-  User(name: "Zoe", avatar: "user.png"),
+List<Category> CategoryList = [
+  Category(name: "Abigail", avatar: "Category.png"),
+  Category(name: "Audrey", avatar: "Category.png"),
+  Category(name: "Ava", avatar: "Category.png"),
+  Category(name: "Bella", avatar: "Category.png"),
+  Category(name: "Bernadette", avatar: "Category.png"),
+  Category(name: "Carol", avatar: "Category.png"),
+  Category(name: "Claire", avatar: "Category.png"),
+  Category(name: "Deirdre", avatar: "Category.png"),
+  Category(name: "Donna", avatar: "Category.png"),
+  Category(name: "Dorothy", avatar: "Category.png"),
+  Category(name: "Faith", avatar: "Category.png"),
+  Category(name: "Gabrielle", avatar: "Category.png"),
+  Category(name: "Grace", avatar: "Category.png"),
+  Category(name: "Hannah", avatar: "Category.png"),
+  Category(name: "Heather", avatar: "Category.png"),
+  Category(name: "Irene", avatar: "Category.png"),
+  Category(name: "Jan", avatar: "Category.png"),
+  Category(name: "Jane", avatar: "Category.png"),
+  Category(name: "Julia", avatar: "Category.png"),
+  Category(name: "Kylie", avatar: "Category.png"),
+  Category(name: "Lauren", avatar: "Category.png"),
+  Category(name: "Leah", avatar: "Category.png"),
+  Category(name: "Lisa", avatar: "Category.png"),
+  Category(name: "Melanie", avatar: "Category.png"),
+  Category(name: "Natalie", avatar: "Category.png"),
+  Category(name: "Olivia", avatar: "Category.png"),
+  Category(name: "Penelope", avatar: "Category.png"),
+  Category(name: "Rachel", avatar: "Category.png"),
+  Category(name: "Ruth", avatar: "Category.png"),
+  Category(name: "Sally", avatar: "Category.png"),
+  Category(name: "Samantha", avatar: "Category.png"),
+  Category(name: "Sarah", avatar: "Category.png"),
+  Category(name: "Theresa", avatar: "Category.png"),
+  Category(name: "Una", avatar: "Category.png"),
+  Category(name: "Vanessa", avatar: "Category.png"),
+  Category(name: "Victoria", avatar: "Category.png"),
+  Category(name: "Wanda", avatar: "Category.png"),
+  Category(name: "Wendy", avatar: "Category.png"),
+  Category(name: "Yvonne", avatar: "Category.png"),
+  Category(name: "Zoe", avatar: "Category.png"),
 ];
 /// Another example of [FilterListWidget] to filter list of strings
 /*
