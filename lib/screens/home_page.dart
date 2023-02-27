@@ -826,6 +826,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     pressedNear = false;
                     cardTapped = false;
                     getDirections = false;
+                    getFilter = false;
                   });
                 },
                 icon: Icon(Icons.search)),
@@ -836,10 +837,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                     radiusSlider = false;
                     pressedNear = false;
                     cardTapped = false;
-                    getDirections = true;
+                    getDirections = false;
+                    getFilter = true;
                   });
                 },
-                icon: Icon(Icons.navigation))
+                icon: Icon(Icons.add))
           ]),
     );
   }
@@ -1022,6 +1024,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 
+//DIRECTIONS
   gotoPlace(double lat, double lng, double endLat, double endLng,
       Map<String, dynamic> boundsNe, Map<String, dynamic> boundsSw) async {
     final GoogleMapController controller = await _controller.future;
@@ -1036,6 +1039,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     _setMarker(LatLng(endLat, endLng));
   }
 
+//
   Future<void> moveCameraSlightly() async {
     final GoogleMapController controller = await _controller.future;
 
@@ -1198,26 +1202,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  _Restaurants(index) {
-    return AnimatedBuilder(
-      animation: _pageController,
-      builder: (BuildContext context, Widget? widget) {
-        double value = 1;
-        if (_pageController.position.haveDimensions) {
-          value = (_pageController.page! - index);
-          value = (1 - (value.abs() * 0.3) + 0.06).clamp(0.0, 1.0);
-        }
-        return Center(
-          child: SizedBox(
-            height: Curves.easeInOut.transform(value) * 125.0,
-            width: Curves.easeInOut.transform(value) * 350.0,
-            child: widget,
-          ),
-        );
-      },
-    );
-  }
-
   Future<void> goToTappedPlace() async {
     final GoogleMapController controller = await _controller.future;
 
@@ -1226,13 +1210,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     var selectedPlace = allFavoritePlaces[_pageController.page!.toInt()];
 
     _setNearMarker(
-        LatLng(selectedPlace['geometry']['location']['lat'],
-            selectedPlace['geometry']['location']['lng']),
-        selectedPlace['name'] ?? 'no name',
-        selectedPlace['types'],
-        selectedPlace['business_status'] ?? 'none');
-
-    _setRestaurants(
         LatLng(selectedPlace['geometry']['location']['lat'],
             selectedPlace['geometry']['location']['lng']),
         selectedPlace['name'] ?? 'no name',

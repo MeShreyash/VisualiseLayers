@@ -62,7 +62,7 @@ class MapServices {
     var lng = coords.longitude;
 
     final String url =
-        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&location=$lat,$lng&radius=$radius&type=hospital&key=$key';
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&location=$lat,$lng&radius=$radius&type=restaurant&key=$key';
 
     var response = await http.get(Uri.parse(url));
 
