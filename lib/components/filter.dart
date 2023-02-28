@@ -36,7 +36,7 @@ class _FilterScreenState extends State<FilterScreen> {
       emptySearchChild: const Center(child: Text('No Category found')),
       // enableOnlySingleSelection: true,
       searchFieldHint: 'Search Here..',
-      /*suggestionBuilder: (context, Category, isSelected) {
+      suggestionBuilder: (context, Category, isSelected) {
         return ListTile(
           title: Text(Category.name!),
           leading: const CircleAvatar(
@@ -44,7 +44,7 @@ class _FilterScreenState extends State<FilterScreen> {
           ),
           selected: isSelected,
         );
-      },*/
+      },
       onApplyButtonClick: (list) {
         setState(() {
           selectedCategoryList = list;
@@ -251,54 +251,21 @@ class FilterPage extends StatelessWidget {
 }
 
 class Category {
-  final String? name;
+  final String name;
+  final String type;
   final String? avatar;
-  Category({this.name, this.avatar});
+  Category({required this.name, required this.type, this.avatar});
 }
 
 /// Creating a global list for example purpose.
 /// Generally it should be within data class or where ever you want
 List<Category> CategoryList = [
-  Category(name: "Abigail", avatar: "Category.png"),
-  Category(name: "Audrey", avatar: "Category.png"),
-  Category(name: "Ava", avatar: "Category.png"),
-  Category(name: "Bella", avatar: "Category.png"),
-  Category(name: "Bernadette", avatar: "Category.png"),
-  Category(name: "Carol", avatar: "Category.png"),
-  Category(name: "Claire", avatar: "Category.png"),
-  Category(name: "Deirdre", avatar: "Category.png"),
-  Category(name: "Donna", avatar: "Category.png"),
-  Category(name: "Dorothy", avatar: "Category.png"),
-  Category(name: "Faith", avatar: "Category.png"),
-  Category(name: "Gabrielle", avatar: "Category.png"),
-  Category(name: "Grace", avatar: "Category.png"),
-  Category(name: "Hannah", avatar: "Category.png"),
-  Category(name: "Heather", avatar: "Category.png"),
-  Category(name: "Irene", avatar: "Category.png"),
-  Category(name: "Jan", avatar: "Category.png"),
-  Category(name: "Jane", avatar: "Category.png"),
-  Category(name: "Julia", avatar: "Category.png"),
-  Category(name: "Kylie", avatar: "Category.png"),
-  Category(name: "Lauren", avatar: "Category.png"),
-  Category(name: "Leah", avatar: "Category.png"),
-  Category(name: "Lisa", avatar: "Category.png"),
-  Category(name: "Melanie", avatar: "Category.png"),
-  Category(name: "Natalie", avatar: "Category.png"),
-  Category(name: "Olivia", avatar: "Category.png"),
-  Category(name: "Penelope", avatar: "Category.png"),
-  Category(name: "Rachel", avatar: "Category.png"),
-  Category(name: "Ruth", avatar: "Category.png"),
-  Category(name: "Sally", avatar: "Category.png"),
-  Category(name: "Samantha", avatar: "Category.png"),
-  Category(name: "Sarah", avatar: "Category.png"),
-  Category(name: "Theresa", avatar: "Category.png"),
-  Category(name: "Una", avatar: "Category.png"),
-  Category(name: "Vanessa", avatar: "Category.png"),
-  Category(name: "Victoria", avatar: "Category.png"),
-  Category(name: "Wanda", avatar: "Category.png"),
-  Category(name: "Wendy", avatar: "Category.png"),
-  Category(name: "Yvonne", avatar: "Category.png"),
-  Category(name: "Zoe", avatar: "Category.png"),
+  Category(name: "Restaurant", type: 'restaurant',avatar: 'assets/mapicons/restaurants.png'),
+  Category(name: "School", type: 'school',avatar: 'assets/mapicons/schools.png'),
+  Category(name: "Hospital", type: 'hospital',avatar: 'assets/mapicons/health-medical.png'),
+  Category(name: "Hotels", type: 'lodging',avatar: 'assets/mapicons/hotels.png'),
+  Category(name: "Bar", type: 'bar',avatar: 'assets/mapicons/bars.png'),
+  Category(name: "Locality", type: 'locality',avatar: 'assets/mapicons/local-services.png'),
 ];
 /// Another example of [FilterListWidget] to filter list of strings
 /*

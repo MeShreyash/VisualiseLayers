@@ -57,19 +57,41 @@ class MapServices {
     return results;
   }
 
-  Future<dynamic> getPlaceDetails(LatLng coords, int radius) async {
-    var lat = coords.latitude;
-    var lng = coords.longitude;
+  // Future<dynamic> getPlaceDetails(LatLng coords, int radius) async {
+  //   var lat = coords.latitude;
+  //   var lng = coords.longitude;
 
-    final String url =
-        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&location=$lat,$lng&radius=$radius&type=restaurant&key=$key';
+  //   final String url =
+  //       'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&location=$lat,$lng&radius=$radius&type=restaurant&key=$key';
 
-    var response = await http.get(Uri.parse(url));
+  //   var response = await http.get(Uri.parse(url));
 
-    var json = convert.jsonDecode(response.body);
+  //   var json = convert.jsonDecode(response.body);
 
-    return json;
-  }
+  //   return json;
+  // }
+
+  Future<dynamic> getPlaceDetails(LatLng coords, int radius, {String? category}) async {
+  var lat = coords.latitude;
+  var lng = coords.longitude;
+
+  String url;
+  // if (category != null && category.isNotEmpty) {
+    url =
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$lat,$lng&radius=$radius&type=$category&key=$key';
+  // } 
+  // else {
+  //   url =
+  //       'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$lat,$lng&radius=$radius&key=$key';
+  // }
+
+  var response = await http.get(Uri.parse(url));
+
+  var json = convert.jsonDecode(response.body);
+
+  return json;
+}
+
 
   Future<dynamic> getMorePlaceDetails(String token) async {
     final String url =

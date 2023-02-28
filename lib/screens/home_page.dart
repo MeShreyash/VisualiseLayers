@@ -490,64 +490,27 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       onPressed: () {
                                         if (_debounce?.isActive ?? false)
                                           _debounce?.cancel();
-                                        _debounce = Timer(Duration(seconds: 1),
+                                        _debounce = Timer(Duration(seconds: 2),
                                             () async {
-                                          var placesResult = await MapServices()
-                                              .getPlaceDetails(tappedPoint,
-                                                  radiusValue.toInt());
-
-                                          List<dynamic> placesWithin =
-                                              placesResult['results'] as List;
-
-                                          allFavoritePlaces = placesWithin;
-
-                                          tokenKey =
-                                              placesResult['next_page_token'] ??
-                                                  'none';
-                                          _markers = {};
-                                          placesWithin.forEach((element) {
-                                            _setNearMarker(
-                                              LatLng(
-                                                  element['geometry']
-                                                      ['location']['lat'],
-                                                  element['geometry']
-                                                      ['location']['lng']),
-                                              element['name'],
-                                              element['types'],
-                                              element['business_status'] ??
-                                                  'not available',
-                                            );
-                                          });
-                                          _markersDupe = _markers;
-                                          pressedNear = true;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.near_me,
-                                        color: Colors.blue,
-                                      ))
-                                  : IconButton(
-                                      onPressed: () {
-                                        if (_debounce?.isActive ?? false)
-                                          _debounce?.cancel();
-                                        _debounce = Timer(Duration(seconds: 1),
-                                            () async {
-                                          if (tokenKey != 'none') {
+                                          for (var category
+                                              in selectedCategoryList!) {
                                             var placesResult =
                                                 await MapServices()
-                                                    .getMorePlaceDetails(
-                                                        tokenKey);
+                                                    .getPlaceDetails(
+                                              tappedPoint,
+                                              radiusValue.toInt(),
+                                              category: category.type,
+                                            );
 
                                             List<dynamic> placesWithin =
                                                 placesResult['results'] as List;
 
-                                            allFavoritePlaces
-                                                .addAll(placesWithin);
+                                            allFavoritePlaces = placesWithin;
 
                                             tokenKey = placesResult[
                                                     'next_page_token'] ??
                                                 'none';
-
+                                            _markers = {};
                                             placesWithin.forEach((element) {
                                               _setNearMarker(
                                                 LatLng(
@@ -561,10 +524,55 @@ class _HomePageState extends ConsumerState<HomePage> {
                                                     'not available',
                                               );
                                             });
-                                          } else {
-                                            print('Thats all folks!!');
+                                            _markersDupe = _markers;
                                           }
+                                          pressedNear = true;
                                         });
+                                      },
+                                      icon: Icon(
+                                        Icons.location_pin,
+                                        color: Colors.blue,
+                                      ))
+                                  : IconButton(
+                                      onPressed: () {
+                                        // if (_debounce?.isActive ?? false)
+                                        //   _debounce?.cancel();
+                                        // _debounce = Timer(Duration(seconds: 1),
+                                        //     () async {
+                                        //   if (tokenKey != 'none') {
+                                            
+                                        //     var placesResult =
+                                        //         await MapServices()
+                                        //             .getMorePlaceDetails(
+                                        //                 tokenKey);
+
+                                        //     List<dynamic> placesWithin =
+                                        //         placesResult['results'] as List;
+
+                                        //     allFavoritePlaces
+                                        //         .addAll(placesWithin);
+
+                                        //     tokenKey = placesResult[
+                                        //             'next_page_token'] ??
+                                        //         'none';
+
+                                        //     placesWithin.forEach((element) {
+                                        //       _setNearMarker(
+                                        //         LatLng(
+                                        //             element['geometry']
+                                        //                 ['location']['lat'],
+                                        //             element['geometry']
+                                        //                 ['location']['lng']),
+                                        //         element['name'],
+                                        //         element['types'],
+                                        //         element['business_status'] ??
+                                        //             'not available',
+                                        //       );
+                                        //     });
+                                        //   } else {
+                                        //     print('Thats all folks!!');
+                                        //   }
+                                        // });
                                       },
                                       icon: Icon(Icons.more_time,
                                           color: Colors.blue)),
