@@ -48,7 +48,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   int markerIdCounter = 1;
   int polylineIdCounter = 1;
 
-  var radiusValue = 3000.0;
+  var radiusValue = 30.0;
 
   var tappedPoint;
 
@@ -477,8 +477,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                             children: [
                               Expanded(
                                   child: Slider(
-                                      max: 7000.0,
-                                      min: 1000.0,
+                                      max: 100.0,
+                                      min: 10.0,
                                       value: radiusValue,
                                       onChanged: (newVal) {
                                         radiusValue = newVal;
@@ -486,11 +486,86 @@ class _HomePageState extends ConsumerState<HomePage> {
                                         _setCircle(tappedPoint);
                                       })),
                               !pressedNear
-                                  ? IconButton(
+                                  ?
+                                  // IconButton(
+                                  //     onPressed: () async {
+                                  //       if (_debounce?.isActive ?? false)
+                                  //         _debounce?.cancel();
+                                  //       _debounce = Timer(Duration(seconds: 2),
+                                  //           () async {
+                                  //         _markers = {};
+                                  //         allFavoritePlaces = [];
+                                  //         tokenKey = 'none';
+                                  //         for (var category
+                                  //             in selectedCategoryList!) {
+                                  //           var placesResult =
+                                  //               await MapServices()
+                                  //                   .getPlaceDetails(
+                                  //             tappedPoint,
+                                  //             radiusValue.toInt(),
+                                  //             category: category.type,
+                                  //           );
+                                  //           List<dynamic> placesWithin =
+                                  //               placesResult['results'] as List;
+                                  //           allFavoritePlaces
+                                  //               .addAll(placesWithin);
+                                  //           tokenKey = placesResult[
+                                  //                   'next_page_token'] ??
+                                  //               'none';
+                                  //           placesWithin.forEach((element) {
+                                  //             _setNearMarker(
+                                  //               LatLng(
+                                  //                   element['geometry']
+                                  //                       ['location']['lat'],
+                                  //                   element['geometry']
+                                  //                       ['location']['lng']),
+                                  //               element['name'],
+                                  //               element['types'],
+                                  //               element['business_status'] ??
+                                  //                   'not available',
+                                  //             );
+                                  //           });
+                                  //         }
+                                  //         for (int i = 1; i <= 3; i++) {
+                                  //           var placesResult =
+                                  //               await MapServices()
+                                  //                   .getMorePlaceDetails(
+                                  //                       tokenKey);
+                                  //           List<dynamic> placesWithin =
+                                  //               placesResult['results'] as List;
+                                  //           allFavoritePlaces
+                                  //               .addAll(placesWithin);
+                                  //           tokenKey = placesResult[
+                                  //                   'next_page_token'] ??
+                                  //               'none';
+                                  //           placesWithin.forEach((element) {
+                                  //             _setNearMarker(
+                                  //               LatLng(
+                                  //                   element['geometry']
+                                  //                       ['location']['lat'],
+                                  //                   element['geometry']
+                                  //                       ['location']['lng']),
+                                  //               element['name'],
+                                  //               element['types'],
+                                  //               element['business_status'] ??
+                                  //                   'not available',
+                                  //             );
+                                  //           });
+                                  //         }
+                                  //         _markersDupe = _markers;
+                                  //         pressedNear = true;
+                                  //       });
+                                  //     },
+                                  //     icon: Icon(
+                                  //       Icons.location_pin,
+                                  //       color: Colors.blue,
+                                  //     ),
+                                  //   )
+                                  IconButton(
                                       onPressed: () {
                                         if (_debounce?.isActive ?? false)
                                           _debounce?.cancel();
-                                        _debounce = Timer(Duration(seconds: 2),
+                                        _debounce = Timer(Duration(seconds: 1),
                                             () async {
                                           for (var category
                                               in selectedCategoryList!) {
@@ -535,47 +610,62 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       ))
                                   : IconButton(
                                       onPressed: () {
-                                        // if (_debounce?.isActive ?? false)
-                                        //   _debounce?.cancel();
-                                        // _debounce = Timer(Duration(seconds: 1),
-                                        //     () async {
-                                        //   if (tokenKey != 'none') {
-                                            
-                                        //     var placesResult =
-                                        //         await MapServices()
-                                        //             .getMorePlaceDetails(
-                                        //                 tokenKey);
+                                        if (_debounce?.isActive ?? false)
+                                          _debounce?.cancel();
+                                        _debounce = Timer(Duration(seconds: 1),
+                                            () async {
+                                          if (tokenKey != 'none') {
+                                            var placesResult =
+                                                await MapServices()
+                                                    .getMorePlaceDetails(
+                                                        tokenKey);
 
-                                        //     List<dynamic> placesWithin =
-                                        //         placesResult['results'] as List;
+                                            List<dynamic> placesWithin =
+                                                placesResult['results'] as List;
 
-                                        //     allFavoritePlaces
-                                        //         .addAll(placesWithin);
+                                            allFavoritePlaces
+                                                .addAll(placesWithin);
 
-                                        //     tokenKey = placesResult[
-                                        //             'next_page_token'] ??
-                                        //         'none';
+                                            tokenKey = placesResult[
+                                                    'next_page_token'] ??
+                                                'none';
 
-                                        //     placesWithin.forEach((element) {
-                                        //       _setNearMarker(
-                                        //         LatLng(
-                                        //             element['geometry']
-                                        //                 ['location']['lat'],
-                                        //             element['geometry']
-                                        //                 ['location']['lng']),
-                                        //         element['name'],
-                                        //         element['types'],
-                                        //         element['business_status'] ??
-                                        //             'not available',
-                                        //       );
-                                        //     });
-                                        //   } else {
-                                        //     print('Thats all folks!!');
-                                        //   }
-                                        // });
+                                            allFavoritePlaces
+                                                .forEach((element) {
+                                              _setNearMarker(
+                                                LatLng(
+                                                    element['geometry']
+                                                        ['location']['lat'],
+                                                    element['geometry']
+                                                        ['location']['lng']),
+                                                element['name'],
+                                                element['types'],
+                                                element['business_status'] ??
+                                                    'not available',
+                                              );
+                                            });
+                                          } else {
+                                            print('No. of places: ');
+                                            print(allFavoritePlaces.length);
+
+                                            showDialog<String>(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AlertDialog(
+                                                title: const Text(
+                                                    'Maximum locations'),
+                                                content: const Text(
+                                                    'No more locations can be found'),
+                                              ),
+                                            );
+                                          }
+                                        });
                                       },
-                                      icon: Icon(Icons.more_time,
-                                          color: Colors.blue)),
+                                      icon: Icon(
+                                        Icons.more_time,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
                               IconButton(
                                   onPressed: () {
                                     setState(() {
