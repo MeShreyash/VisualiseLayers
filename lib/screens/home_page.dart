@@ -48,7 +48,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   int markerIdCounter = 1;
   int polylineIdCounter = 1;
 
-  var radiusValue = 30.0;
+  var radiusValue = 3000.0;
 
   var tappedPoint;
 
@@ -131,28 +131,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     });
   }
 
-  _setRestaurants(LatLng point, String label, List types, String status) async {
-    var counter = markerIdCounter++;
-
-    final Uint8List markerIcon;
-
-    if (types.contains('restaurants'))
-      markerIcon =
-          await getBytesFromAsset('assets/mapicons/restaurants.png', 75);
-    else
-      markerIcon = await getBytesFromAsset('assets/mapicons/places.png', 75);
-
-    final Marker marker = Marker(
-        markerId: MarkerId('marker_$counter'),
-        position: point,
-        onTap: () {},
-        icon: BitmapDescriptor.fromBytes(markerIcon));
-
-    setState(() {
-      _markers.add(marker);
-    });
-  }
-
   _setNearMarker(LatLng point, String label, List types, String status) async {
     var counter = markerIdCounter++;
 
@@ -162,7 +140,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       markerIcon =
           await getBytesFromAsset('assets/mapicons/restaurants.png', 75);
     else if (types.contains('food'))
-      markerIcon = await getBytesFromAsset('assets/mapicons/food.png', 75);
+      markerIcon =
+          await getBytesFromAsset('assets/mapicons/restaurants.png', 75);
     else if (types.contains('school'))
       markerIcon = await getBytesFromAsset('assets/mapicons/schools.png', 75);
     else if (types.contains('hospital'))
@@ -477,8 +456,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                             children: [
                               Expanded(
                                   child: Slider(
-                                      max: 100.0,
-                                      min: 10.0,
+                                      max: 7000.0,
+                                      min: 1000.0,
                                       value: radiusValue,
                                       onChanged: (newVal) {
                                         radiusValue = newVal;
@@ -567,41 +546,48 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           _debounce?.cancel();
                                         _debounce = Timer(Duration(seconds: 1),
                                             () async {
-                                          for (var category
-                                              in selectedCategoryList!) {
-                                            var placesResult =
-                                                await MapServices()
-                                                    .getPlaceDetails(
-                                              tappedPoint,
-                                              radiusValue.toInt(),
-                                              category: category.type,
-                                            );
+                                          //
+                                          updateMarkersFromCategories();
+                                          setState(() {
+                                            pressedNear = true;
+                                          });
 
-                                            List<dynamic> placesWithin =
-                                                placesResult['results'] as List;
+                                          // //
+                                          // for (var category
+                                          //     in selectedCategoryList!) {
+                                          //   var placesResult =
+                                          //       await MapServices()
+                                          //           .getPlaceDetails(
+                                          //     tappedPoint,
+                                          //     radiusValue.toInt(),
+                                          //     category: category.type,
+                                          //   );
 
-                                            allFavoritePlaces = placesWithin;
+                                          //   List<dynamic> placesWithin =
+                                          //       placesResult['results'] as List;
 
-                                            tokenKey = placesResult[
-                                                    'next_page_token'] ??
-                                                'none';
-                                            _markers = {};
-                                            placesWithin.forEach((element) {
-                                              _setNearMarker(
-                                                LatLng(
-                                                    element['geometry']
-                                                        ['location']['lat'],
-                                                    element['geometry']
-                                                        ['location']['lng']),
-                                                element['name'],
-                                                element['types'],
-                                                element['business_status'] ??
-                                                    'not available',
-                                              );
-                                            });
-                                            _markersDupe = _markers;
-                                          }
-                                          pressedNear = true;
+                                          //   allFavoritePlaces = placesWithin;
+
+                                          //   tokenKey = placesResult[
+                                          //           'next_page_token'] ??
+                                          //       'none';
+                                          //   _markers = {};
+                                          //   placesWithin.forEach((element) {
+                                          //     _setNearMarker(
+                                          //       LatLng(
+                                          //           element['geometry']
+                                          //               ['location']['lat'],
+                                          //           element['geometry']
+                                          //               ['location']['lng']),
+                                          //       element['name'],
+                                          //       element['types'],
+                                          //       element['business_status'] ??
+                                          //           'not available',
+                                          //     );
+                                          //   });
+                                          //   _markersDupe = _markers;
+                                          // }
+                                          // pressedNear = true;
                                         });
                                       },
                                       icon: Icon(
@@ -1413,5 +1399,34 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
       ),
     );
+  }
+
+//
+  void updateMarkersFromCategories() async {
+    _markers = {};
+    for (var category in selectedCategoryList!) {
+      var placesResult = await MapServices().getPlaceDetails(
+        tappedPoint,
+        radiusValue.toInt(),
+        category: category.type,
+      );
+
+      List<dynamic> placesWithin = placesResult['results'] as List;
+
+      allFavoritePlaces = placesWithin;
+
+      tokenKey = placesResult['next_page_token'] ?? 'none';
+
+      placesWithin.forEach((element) {
+        _setNearMarker(
+          LatLng(element['geometry']['location']['lat'],
+              element['geometry']['location']['lng']),
+          element['name'],
+          element['types'],
+          element['business_status'] ?? 'not available',
+        );
+      });
+    }
+    _markersDupe = _markers;
   }
 }

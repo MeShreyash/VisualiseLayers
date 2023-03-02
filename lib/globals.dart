@@ -3,3 +3,4 @@ import 'package:googlemapsapp/globals.dart';
 import 'package:flutter/material.dart';
 
 Map<String, Set<Marker>> categoryMarker = {};
+List allSelectedCategoryMarker = [];

@@ -260,42 +260,21 @@ class Category {
 /// Creating a global list for example purpose.
 /// Generally it should be within data class or where ever you want
 List<Category> CategoryList = [
-  Category(name: "Restaurant", type: 'restaurant',avatar: 'assets/mapicons/restaurants.png'),
-  Category(name: "School", type: 'school',avatar: 'assets/mapicons/schools.png'),
-  Category(name: "Hospital", type: 'hospital',avatar: 'assets/mapicons/health-medical.png'),
-  Category(name: "Hotels", type: 'lodging',avatar: 'assets/mapicons/hotels.png'),
-  Category(name: "Bar", type: 'bar',avatar: 'assets/mapicons/bars.png'),
-  Category(name: "Locality", type: 'locality',avatar: 'assets/mapicons/local-services.png'),
+  Category(
+      name: "Restaurant",
+      type: 'restaurant',
+      avatar: 'assets/mapicons/restaurants.png'),
+  Category(
+      name: "School", type: 'school', avatar: 'assets/mapicons/schools.png'),
+  Category(
+      name: "Hospital",
+      type: 'hospital',
+      avatar: 'assets/mapicons/health-medical.png'),
+  Category(
+      name: "Hotels", type: 'lodging', avatar: 'assets/mapicons/hotels.png'),
+  Category(name: "Bar", type: 'bar', avatar: 'assets/mapicons/bars.png'),
+  Category(
+      name: "Locality",
+      type: 'locality',
+      avatar: 'assets/mapicons/local-services.png'),
 ];
-/// Another example of [FilterListWidget] to filter list of strings
-/*
- FilterListWidget<String>(
-    listData: [
-      "One",
-      "Two",
-      "Three",
-      "Four",
-      "five",
-      "Six",
-      "Seven",
-      "Eight",
-      "Nine",
-      "Ten"
-    ],
-    selectedListData: ["One", "Three", "Four", "Eight", "Nine"],
-    onApplyButtonClick: (list) {
-      Navigator.pop(context, list);
-    },
-    choiceChipLabel: (item) {
-      /// Used to print text on chip
-      return item;
-    },
-    validateSelectedItem: (list, val) {
-      ///  identify if item is selected or not
-      return list!.contains(val);
-    },
-    onItemSearch: (text, query) {
-      return text.toLowerCase().contains(query.toLowerCase());
-    },
-  )
-*/
