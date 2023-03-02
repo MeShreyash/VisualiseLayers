@@ -12,91 +12,91 @@ class FilterScreen extends StatefulWidget {
 class _FilterScreenState extends State<FilterScreen> {
   List<Category>? selectedCategoryList = [];
 
-  Future<void> openFilterDelegate() async {
-    await FilterListDelegate.show<Category>(
-      context: context,
-      list: CategoryList,
-      selectedListData: selectedCategoryList,
-      theme: FilterListDelegateThemeData(
-        listTileTheme: ListTileThemeData(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          tileColor: Colors.white,
-          selectedColor: Colors.red,
-          selectedTileColor: const Color(0xFF649BEC).withOpacity(.5),
-          textColor: Colors.blue,
-        ),
-      ),
-      // enableOnlySingleSelection: true,
-      onItemSearch: (Category, query) {
-        return Category.name!.toLowerCase().contains(query.toLowerCase());
-      },
-      tileLabel: (Category) => Category!.name,
-      emptySearchChild: const Center(child: Text('No Category found')),
-      // enableOnlySingleSelection: true,
-      searchFieldHint: 'Search Here..',
-      suggestionBuilder: (context, Category, isSelected) {
-        return ListTile(
-          title: Text(Category.name!),
-          leading: const CircleAvatar(
-            backgroundColor: Colors.blue,
-          ),
-          selected: isSelected,
-        );
-      },
-      onApplyButtonClick: (list) {
-        setState(() {
-          selectedCategoryList = list;
-        });
-      },
-    );
-  }
+  // Future<void> openFilterDelegate() async {
+  //   await FilterListDelegate.show<Category>(
+  //     context: context,
+  //     list: CategoryList,
+  //     selectedListData: selectedCategoryList,
+  //     theme: FilterListDelegateThemeData(
+  //       listTileTheme: ListTileThemeData(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(10),
+  //         ),
+  //         tileColor: Colors.white,
+  //         selectedColor: Colors.red,
+  //         selectedTileColor: const Color(0xFF649BEC).withOpacity(.5),
+  //         textColor: Colors.blue,
+  //       ),
+  //     ),
+  //     // enableOnlySingleSelection: true,
+  //     onItemSearch: (Category, query) {
+  //       return Category.name!.toLowerCase().contains(query.toLowerCase());
+  //     },
+  //     tileLabel: (Category) => Category!.name,
+  //     emptySearchChild: const Center(child: Text('No Category found')),
+  //     // enableOnlySingleSelection: true,
+  //     searchFieldHint: 'Search Here..',
+  //     suggestionBuilder: (context, Category, isSelected) {
+  //       return ListTile(
+  //         title: Text(Category.name!),
+  //         leading: const CircleAvatar(
+  //           backgroundColor: Colors.blue,
+  //         ),
+  //         selected: isSelected,
+  //       );
+  //     },
+  //     onApplyButtonClick: (list) {
+  //       setState(() {
+  //         selectedCategoryList = list;
+  //       });
+  //     },
+  //   );
+  // }
 
-  Future<void> _openFilterDialog() async {
-    await FilterListDialog.display<Category>(
-      context,
-      hideSelectedTextCount: true,
-      themeData: FilterListThemeData(context),
-      headlineText: 'Select Categories',
-      height: 500,
-      listData: CategoryList,
-      selectedListData: selectedCategoryList,
-      choiceChipLabel: (item) => item!.name,
-      validateSelectedItem: (list, val) => list!.contains(val),
-      controlButtons: [ControlButtonType.All, ControlButtonType.Reset],
-      onItemSearch: (Category, query) {
-        /// When search query change in search bar then this method will be called
-        ///
-        /// Check if items contains query
-        return Category.name!.toLowerCase().contains(query.toLowerCase());
-      },
+  // Future<void> _openFilterDialog() async {
+  //   await FilterListDialog.display<Category>(
+  //     context,
+  //     hideSelectedTextCount: true,
+  //     themeData: FilterListThemeData(context),
+  //     headlineText: 'Select Categories',
+  //     height: 500,
+  //     listData: CategoryList,
+  //     selectedListData: selectedCategoryList,
+  //     choiceChipLabel: (item) => item!.name,
+  //     validateSelectedItem: (list, val) => list!.contains(val),
+  //     controlButtons: [ControlButtonType.All, ControlButtonType.Reset],
+  //     onItemSearch: (Category, query) {
+  //       /// When search query change in search bar then this method will be called
+  //       ///
+  //       /// Check if items contains query
+  //       return Category.name!.toLowerCase().contains(query.toLowerCase());
+  //     },
 
-      onApplyButtonClick: (list) {
-        setState(() {
-          selectedCategoryList = List.from(list!);
-        });
-        Navigator.pop(context);
-      },
+  //     onApplyButtonClick: (list) {
+  //       setState(() {
+  //         selectedCategoryList = List.from(list!);
+  //       });
+  //       Navigator.pop(context);
+  //     },
 
-      /// uncomment below code to create custom choice chip
-      /* choiceChipBuilder: (context, item, isSelected) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          decoration: BoxDecoration(
-              border: Border.all(
-            color: isSelected! ? Colors.blue[300]! : Colors.grey[300]!,
-          )),
-          child: Text(
-            item.name,
-            style: TextStyle(
-                color: isSelected ? Colors.blue[300] : Colors.grey[500]),
-          ),
-        );
-      }, */
-    );
-  }
+  //     /// uncomment below code to create custom choice chip
+  //     /* choiceChipBuilder: (context, item, isSelected) {
+  //       return Container(
+  //         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  //         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+  //         decoration: BoxDecoration(
+  //             border: Border.all(
+  //           color: isSelected! ? Colors.blue[300]! : Colors.grey[300]!,
+  //         )),
+  //         child: Text(
+  //           item.name,
+  //           style: TextStyle(
+  //               color: isSelected ? Colors.blue[300] : Colors.grey[500]),
+  //         ),
+  //       );
+  //     }, */
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +109,7 @@ class _FilterScreenState extends State<FilterScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
+            //Navigation Way used in the home_page to access thew FilterPage
             TextButton(
               onPressed: () async {
                 final list = await Navigator.push(
@@ -134,28 +135,28 @@ class _FilterScreenState extends State<FilterScreen> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            TextButton(
-              onPressed: _openFilterDialog,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-              ),
-              child: const Text(
-                "Filter Dialog",
-                style: TextStyle(color: Colors.white),
-              ),
-              // color: Colors.blue,
-            ),
-            TextButton(
-              onPressed: openFilterDelegate,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-              ),
-              child: const Text(
-                "Filter Delegate",
-                style: TextStyle(color: Colors.white),
-              ),
-              // color: Colors.blue,
-            ),
+            // TextButton(
+            //   onPressed: _openFilterDialog,
+            //   style: ButtonStyle(
+            //     backgroundColor: MaterialStateProperty.all(Colors.blue),
+            //   ),
+            //   child: const Text(
+            //     "Filter Dialog",
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            //   // color: Colors.blue,
+            // ),
+            // TextButton(
+            //   onPressed: openFilterDelegate,
+            //   style: ButtonStyle(
+            //     backgroundColor: MaterialStateProperty.all(Colors.blue),
+            //   ),
+            //   child: const Text(
+            //     "Filter Delegate",
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            //   // color: Colors.blue,
+            // ),
           ],
         ),
       ),

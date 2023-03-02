@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Map Layers',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: HomePage(),
+      home: SplashScreen(),
     );
   }
 }

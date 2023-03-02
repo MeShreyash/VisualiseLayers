@@ -551,43 +551,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           setState(() {
                                             pressedNear = true;
                                           });
-
-                                          // //
-                                          // for (var category
-                                          //     in selectedCategoryList!) {
-                                          //   var placesResult =
-                                          //       await MapServices()
-                                          //           .getPlaceDetails(
-                                          //     tappedPoint,
-                                          //     radiusValue.toInt(),
-                                          //     category: category.type,
-                                          //   );
-
-                                          //   List<dynamic> placesWithin =
-                                          //       placesResult['results'] as List;
-
-                                          //   allFavoritePlaces = placesWithin;
-
-                                          //   tokenKey = placesResult[
-                                          //           'next_page_token'] ??
-                                          //       'none';
-                                          //   _markers = {};
-                                          //   placesWithin.forEach((element) {
-                                          //     _setNearMarker(
-                                          //       LatLng(
-                                          //           element['geometry']
-                                          //               ['location']['lat'],
-                                          //           element['geometry']
-                                          //               ['location']['lng']),
-                                          //       element['name'],
-                                          //       element['types'],
-                                          //       element['business_status'] ??
-                                          //           'not available',
-                                          //     );
-                                          //   });
-                                          //   _markersDupe = _markers;
-                                          // }
-                                          // pressedNear = true;
                                         });
                                       },
                                       icon: Icon(
@@ -639,9 +602,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                                               builder: (BuildContext context) =>
                                                   AlertDialog(
                                                 title: const Text(
-                                                    'Maximum locations'),
+                                                    'Maximum limit reached'),
                                                 content: const Text(
-                                                    'No more locations can be found'),
+                                                    'Only 60 locations can be fetched'),
                                               ),
                                             );
                                           }
@@ -871,14 +834,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ),
                           ),
                         ))
-                    : Container(),
-
-                //NEED TO WORK alot on this
-                getFilter
-                    ? FilterPage(
-                        allTextList: CategoryList,
-                        selectedCategoryList: selectedCategoryList,
-                      )
                     : Container(),
               ],
             )
