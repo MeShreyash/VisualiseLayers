@@ -1,6 +1,15 @@
+import 'dart:convert';
+
+import 'package:csv/csv.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:http/http.dart' as http;
 
 class FilterScreen extends StatefulWidget {
   const FilterScreen({Key? key}) : super(key: key);
@@ -200,8 +209,11 @@ class FilterPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.fromLTRB(50, 10, 10, 10),
             child: FloatingActionButton.extended(
-              onPressed: () {
-                // Add your onPressed code here!
+              onPressed: () async {
+                final result = await pickAndUploadFile();
+                // if (result != null) {
+                //   // Do something with the uploaded file
+                // }
               },
               elevation: 0,
               label: const Text('Add Layer'),
@@ -249,6 +261,61 @@ class FilterPage extends StatelessWidget {
       ),
     );
   }
+}
+
+// Define a function to handle file pick and upload
+Future<void> pickAndUploadFile() async {
+  // Pick a file
+  final result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+    allowedExtensions: [
+      'csv',
+      'xls',
+      'xlsx'
+    ], // Allow only CSV, XLS, XLSX files
+  );
+
+  // Check if a file was picked
+  if (result == null || result.files.isEmpty) {
+    // No file picked
+    return;
+  }
+
+  // Get the file object
+  final file = File(result.files.first.path!);
+
+  // Upload the file to the server
+  final response = await uploadFileToServer(file);
+
+  // Handle the server response
+  // ...
+}
+
+// Define a function to upload a file to the server
+Future<http.Response> uploadFileToServer(File file) async {
+  // Create a multipart request to upload the file
+  final request = http.MultipartRequest(
+    'POST',
+    Uri.parse('https://example.com/upload'),
+  );
+
+  // Add the file to the request
+  final fileStream = http.ByteStream(file.openRead());
+  final fileLength = await file.length();
+  final multipartFile = http.MultipartFile(
+    'file',
+    fileStream,
+    fileLength,
+    filename: file.path.split('/').last,
+  );
+  request.files.add(multipartFile);
+
+  // Send the request and wait for the response
+  final response = await request.send();
+
+  // Read and return the response body
+  final responseBody = await response.stream.bytesToString();
+  return http.Response(responseBody, response.statusCode);
 }
 
 class Category {
