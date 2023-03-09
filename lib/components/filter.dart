@@ -9,7 +9,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:googlemapsapp/services/excel_service.dart';
 import 'package:http/http.dart' as http;
+
+import '../globals.dart';
+
+//For UI Toggling
+bool isfileUploaded = false;
 
 class FilterScreen extends StatefulWidget {
   const FilterScreen({Key? key}) : super(key: key);
@@ -19,8 +25,6 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  List<Category>? selectedCategoryList = [];
-
   // Future<void> openFilterDelegate() async {
   //   await FilterListDelegate.show<Category>(
   //     context: context,
@@ -211,13 +215,17 @@ class FilterPage extends StatelessWidget {
             child: FloatingActionButton.extended(
               onPressed: () async {
                 final result = await pickAndUploadFile();
-                // if (result != null) {
-                //   // Do something with the uploaded file
-                // }
+                // isfileUploaded = true;
+                // setState((result) {
+                //   isfileUploaded = true;
+                // });
               },
               elevation: 0,
-              label: const Text('Add Layer'),
-              icon: const Icon(Icons.download_rounded),
+              label:
+                  isfileUploaded ? const Text('Plot') : const Text('Add Layer'),
+              icon: isfileUploaded
+                  ? const Icon(Icons.location_pin)
+                  : const Icon(Icons.download_rounded),
               backgroundColor: Color.fromARGB(255, 0, 70, 102).withOpacity(0.2),
             ),
           ),
@@ -283,40 +291,43 @@ Future<void> pickAndUploadFile() async {
 
   // Get the file object
   final file = File(result.files.first.path!);
+  // Read the file
+
+  List<Map<String, dynamic>> excelData = await readExcelData(file as String);
 
   // Upload the file to the server
-  final response = await uploadFileToServer(file);
+  // final response = await uploadFileToServer(file);
 
   // Handle the server response
   // ...
 }
 
 // Define a function to upload a file to the server
-Future<http.Response> uploadFileToServer(File file) async {
-  // Create a multipart request to upload the file
-  final request = http.MultipartRequest(
-    'POST',
-    Uri.parse('https://example.com/upload'),
-  );
+// Future<http.Response> uploadFileToServer(File file) async {
+//   // Create a multipart request to upload the file
+//   final request = http.MultipartRequest(
+//     'POST',
+//     Uri.parse('https://example.com/upload'),
+//   );
 
-  // Add the file to the request
-  final fileStream = http.ByteStream(file.openRead());
-  final fileLength = await file.length();
-  final multipartFile = http.MultipartFile(
-    'file',
-    fileStream,
-    fileLength,
-    filename: file.path.split('/').last,
-  );
-  request.files.add(multipartFile);
+//   // Add the file to the request
+//   final fileStream = http.ByteStream(file.openRead());
+//   final fileLength = await file.length();
+//   final multipartFile = http.MultipartFile(
+//     'file',
+//     fileStream,
+//     fileLength,
+//     filename: file.path.split('/').last,
+//   );
+//   request.files.add(multipartFile);
 
-  // Send the request and wait for the response
-  final response = await request.send();
+//   // Send the request and wait for the response
+//   final response = await request.send();
 
-  // Read and return the response body
-  final responseBody = await response.stream.bytesToString();
-  return http.Response(responseBody, response.statusCode);
-}
+//   // Read and return the response body
+//   final responseBody = await response.stream.bytesToString();
+//   return http.Response(responseBody, response.statusCode);
+// }
 
 class Category {
   final String name;
@@ -327,22 +338,41 @@ class Category {
 
 /// Creating a global list for example purpose.
 /// Generally it should be within data class or where ever you want
+
 List<Category> CategoryList = [
+  if (isfileUploaded)
+    Category(
+      name: "Shops",
+      type: 'uploadedFile',
+      avatar: 'assets/mapicons/telemarketing.png',
+    ),
   Category(
-      name: "Restaurant",
-      type: 'restaurant',
-      avatar: 'assets/mapicons/restaurants.png'),
+    name: "Restaurant",
+    type: 'restaurant',
+    avatar: 'assets/mapicons/restaurants.png',
+  ),
   Category(
-      name: "School", type: 'school', avatar: 'assets/mapicons/schools.png'),
+    name: "School",
+    type: 'school',
+    avatar: 'assets/mapicons/schools.png',
+  ),
   Category(
       name: "Hospital",
       type: 'hospital',
       avatar: 'assets/mapicons/health-medical.png'),
   Category(
-      name: "Hotels", type: 'lodging', avatar: 'assets/mapicons/hotels.png'),
-  Category(name: "Bar", type: 'bar', avatar: 'assets/mapicons/bars.png'),
+    name: "Hotels",
+    type: 'lodging',
+    avatar: 'assets/mapicons/hotels.png',
+  ),
   Category(
-      name: "Locality",
-      type: 'locality',
-      avatar: 'assets/mapicons/local-services.png'),
+    name: "Bar",
+    type: 'bar',
+    avatar: 'assets/mapicons/bars.png',
+  ),
+  Category(
+    name: "Locality",
+    type: 'locality',
+    avatar: 'assets/mapicons/local-services.png',
+  ),
 ];
